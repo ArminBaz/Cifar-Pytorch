@@ -11,7 +11,7 @@ The main objective is to get practice with Pytorch. To do this I am creating dif
 * barbar 0.2.1
 
 ### To Do:
-- [ ] BaseNet
+- [x] BaseNet
 - [ ] ResNet
 - [ ] DenseNet
 - [ ] Inception V3
