@@ -60,7 +60,7 @@ net = net.to(device)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(net.parameters(), lr=0.001)
-
+m
 # TODO: Actually save the best model in checkpoints during testing
 # Helper function to save best model
 def save_model(state, model_name):
