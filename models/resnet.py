@@ -4,8 +4,6 @@ This is my implementation of ResNet in PyTorch.
 The paper I am using for reference can be found here: https://arxiv.org/pdf/1512.03385.pdf
 
 From reading the paper, there is one important class to implement. That is Block class that has 3x3 kernel, 64/128/256/512
-
-Also, big thanks to https://github.com/kuangliu where I took motivation for how to dynamically build the resnet classes
 '''
 
 import torch
@@ -55,8 +53,37 @@ class BasicResidualBlock(nn.Module):
         out = F.relu(out)
 
         return out
-            
 
+'''
+The bottlneck functions essentially the same way as the basic residual block.
+The key differences is 1) There are three convolutions instead of 2 and we expand the channels by 4 for the last convolution
+                       2) The kernels are 1x1 except for the middle convolution which is 3x3
+'''
+class BottleneckResidualBlock(nn.Module):
+    expansion = 4
+    def __init__(self, in_channels, out_channels, stride=1, upsample_shortcut=None):
+        super(BottleneckResidualBlock, self).__init__()
+
+        self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.conv2 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels, stride=stride, kernel_size=3, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        self.conv3 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels*self.expansion, kernel_size=1, bias=False)
+        self.bn3 = nn.BatchNorm2d(out_channels*self.expansion)
+        self.upsample_shortcut = upsample_shortcut
+    
+    def forward(self, x):
+        shortcut = x
+        out = F.relu(self.bn1(self.conv1(x)))
+        out = F.relu(self.bn2(self.conv2(out)))
+        out = self.bn3(self.conv3(out))
+        if self.upsample_shortcut is not None:
+            shortcut = self.upsample_shortcut(shortcut)
+        
+        out += shortcut
+        out = F.relu(out)
+
+        return out
 
 '''
 ResNet Class.
@@ -83,7 +110,7 @@ class ResNet(nn.Module):
 
 
     # function to make each layer
-    def make_ResBlock(self, block_type, num_blocks, out_channels, stride=1 ):
+    def make_ResBlock(self, block_type, num_blocks, out_channels, stride=1):
         upsample_shortcut = None
         layers = []
 
@@ -92,7 +119,7 @@ class ResNet(nn.Module):
                                                 nn.BatchNorm2d(out_channels * block_type.expansion))
         
         # always start with in_channels and update using expansion channels
-        layers.append(block_type(self.in_channels, out_channels, stride, upsample_shortcut))
+        layers.append(block_type(self.in_channels, out_channels, stride=stride, upsample_shortcut=upsample_shortcut))
         self.in_channels = out_channels * block_type.expansion
 
         # loop through the number of this block we want and create layers
@@ -128,10 +155,20 @@ def ResNet18():
 def ResNet34():
     return ResNet(BasicResidualBlock, [3, 4, 6, 3])
 
+def ResNet50():
+    return ResNet(BottleneckResidualBlock, [3, 4, 6, 3])
+
+
+def ResNet101():
+    return ResNet(BottleneckResidualBlock, [3, 4, 23, 3])
+
+
+def ResNet152():
+    return ResNet(BottleneckResidualBlock, [3, 8, 36, 3])
+
 # Test code that I stole from github
 def test():
-    net = ResNet18()
+    net = ResNet50()
     y = net(torch.randn(1, 3, 32, 32))
     print(y.size())
-
 test()
