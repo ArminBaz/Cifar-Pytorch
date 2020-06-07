@@ -12,7 +12,7 @@ The main objective is to get practice with Pytorch. To do this I am creating dif
 
 ### To Do:
 - [x] BaseNet
-- [ ] ResNet
+- [x] ResNet
 - [ ] DenseNet
 - [ ] Inception V3
 - [ ] VGG
