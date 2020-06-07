@@ -71,7 +71,6 @@ class ResNet(nn.Module):
         self.in_channels = 64
         self.conv1 = nn.Conv2d(3, 64, kernel_size = 3, stride=1, padding=1 )
         self.bn1 = nn.BatchNorm2d(64)
-        #self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         # contruct the residual blocks (always 4 blocks in paper with varying numbers inside)
         # always in the order of [64, 128, 256, 512]
@@ -109,7 +108,6 @@ class ResNet(nn.Module):
     def forward(self, x):
         # inital conv
         out = F.relu(self.bn1(self.conv1(x)))
-        #out = self.maxpool(out)
         # res blocks
         out = self.resblock1(out)
         out = self.resblock2(out)
