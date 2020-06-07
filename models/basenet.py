@@ -44,15 +44,15 @@ class BaseNet(nn.Module):
             nn.Linear(512, 10)
         )
 
-        # forward pass function
-        def forward(self, x):
-            # conv layers
-            x = self.conv_blocks(x)
+    # forward pass function
+    def forward(self, x):
+        # conv layers
+        x = self.conv_blocks(x)
 
-            # flatten
-            x = x.view(x.size(0), -1)
+        # flatten
+        x = x.view(x.size(0), -1)
 
-            # fc layer
-            x = self.fc_block(x)
+        # fc layer
+        x = self.fc_block(x)
 
-            return x
+        return x
