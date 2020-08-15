@@ -1,7 +1,9 @@
 ## Cifar10 with Pytorch
 
 ### Introduction
-The main objective is to get practice with Pytorch. To do this I am creating different well known models and applying each one to the Cifar10 dataset. 
+The main objective is to get practice with Pytorch. To do this I am creating different well known models and applying each one to the Cifar10 dataset. <br>
+
+Because I don't have access to a GPU, I am training these models using Google Colab (Thank you Google) for 100 epochs
 
 ### Requirements
 * python 3.7
@@ -19,3 +21,5 @@ The main objective is to get practice with Pytorch. To do this I am creating dif
 - [ ] etc...
 
 ### Accuracies
+- BaseNet ~ Training Accuracy : 90.8 | Testing Accuracy : 
+- ResNet18 ~ Training Accuracy : 
