@@ -24,4 +24,4 @@ Also, because I don't feel like training models all day. I decided that I would 
 
 ### Accuracies
 - BaseNet ~ 90% training accuracy reached at epoch 88
-- ResNet18 ~ 90% training accuracy reached at epoch 37
+- ResNet18 ~ 90% training accuracy reached at epoch 36
